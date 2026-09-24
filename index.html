@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Bay Island Timecard App Request</title>
+<style>
+  :root{
+    --bg:#f4f6f5; --card:#ffffff; --ink:#1c2321; --muted:#5d6865; --line:#d5dcda;
+    --brand:#c8102e; --brand-ink:#ffffff; --err:#b3261e; --ok:#1e7d3a; --focus:#c8102e55;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#121716; --card:#1b2220; --ink:#e8eeec; --muted:#a3b0ac; --line:#34403d;
+      --brand:#ff6b81; --brand-ink:#1a0a0d; --err:#ff8a80; --ok:#7fd99a; --focus:#ff6b8155; }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font:17px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
+  header{margin:4px 0 16px;text-align:center}
+  .logo{display:block;width:120px;height:auto;margin:4px auto 10px}
+  .lang{justify-content:center}
+  h1{font-size:1.35rem;margin:0 0 12px;line-height:1.25}
+  .lang{display:flex;flex-wrap:wrap;gap:8px}
+  .lang button{border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);
+    padding:8px 14px;font:inherit;font-size:.95rem;cursor:pointer;min-height:40px}
+  .lang button[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);font-weight:600}
+  [dir=rtl] .ltr{direction:ltr;text-align:right}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 16px}
+  .intro{color:var(--muted);margin:0 0 16px}
+  label{display:block;font-weight:600;margin:14px 0 6px}
+  .opt{font-weight:400;color:var(--muted)}
+  input[type=text],input[type=tel],input[type=email],select{
+    width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--ink);font:inherit}
+  input:focus,button:focus-visible{outline:3px solid var(--focus);outline-offset:1px}
+  .err{color:var(--err);font-size:.9rem;margin-top:4px;min-height:0}
+  .photo{margin-top:18px;border:2px dashed var(--line);border-radius:12px;padding:14px;text-align:center}
+  .photo img{display:none;width:160px;height:160px;object-fit:cover;border-radius:50%;margin:0 auto 10px}
+  .photo.has img{display:block}
+  .example{display:flex;flex-direction:column;align-items:center;margin:0 auto 12px}
+  .example svg{width:120px;height:auto;display:block}
+  .example span{font-size:.8rem;color:var(--muted);margin-top:4px}
+  .photo.has .example{display:none}
+  .ex-bg{fill:var(--bg)} .ex-frame{fill:none;stroke:var(--muted);stroke-width:3;stroke-dasharray:8 6}
+  .ex-person{fill:var(--muted);opacity:.55} .ex-guide{fill:none;stroke:var(--brand);stroke-width:3}
+  .btn{display:block;width:100%;padding:14px;border-radius:12px;border:0;font:inherit;font-weight:700;cursor:pointer}
+  .btn-primary{background:var(--brand);color:var(--brand-ink);margin-top:22px}
+  .btn-secondary{background:transparent;color:var(--brand);border:2px solid var(--brand)}
+  .btn[disabled]{opacity:.6;cursor:wait}
+  .hint{color:var(--muted);font-size:.9rem;margin:8px 0 0}
+  .hp{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .done{text-align:center;padding:28px 12px}
+  .done p{text-align:left}
+  .done .check{font-size:3rem;color:var(--ok);line-height:1}
+  .privacy{color:var(--muted);font-size:.82rem;margin-top:14px}
+  .status{margin-top:12px;font-weight:600}
+  .status.bad{color:var(--err)}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <img class="logo" src="data:image/png;base64,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" alt="Bay Island">
+    <h1 data-t="title">Bay Island Timecard App Request</h1>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" lang="en" aria-pressed="true">English</button>
+      <button type="button" data-lang="es" lang="es" aria-pressed="false">Español</button>
+      <button type="button" data-lang="hmn" lang="hmn" aria-pressed="false">Hmoob</button>
+      <button type="button" data-lang="so" lang="so" aria-pressed="false">Soomaali</button>
+      <button type="button" data-lang="ar" lang="ar" dir="rtl" aria-pressed="false">العربية</button>
+    </div>
+  </header>
+
+  <section class="card" id="formCard">
+    <p class="intro" data-t="intro">Welcome to Bay Island! Please fill this out on your first day. It takes about 2 minutes.</p>
+    <form id="f" novalidate>
+      <label for="firstName" data-t="first">First name</label>
+      <input id="firstName" name="firstName" type="text" autocomplete="given-name" maxlength="60" required>
+      <div class="err" id="e-firstName"></div>
+
+      <label for="lastName" data-t="last">Last name</label>
+      <input id="lastName" name="lastName" type="text" autocomplete="family-name" maxlength="60" required>
+      <div class="err" id="e-lastName"></div>
+
+      <label for="agency" data-t="agency">Temp agency you work for</label>
+      <input id="agency" name="agency" type="text" maxlength="80" required>
+      <div class="err" id="e-agency"></div>
+
+      <label for="phone" data-t="phone">Cell phone number</label>
+      <input id="phone" name="phone" type="tel" class="ltr" autocomplete="tel" inputmode="numeric" maxlength="12" placeholder="651-301-9687" pattern="\d{3}-\d{3}-\d{4}" required>
+      <div class="err" id="e-phone"></div>
+
+      <label for="email" data-t="email">Email address</label>
+      <input id="email" name="email" type="email" class="ltr" autocomplete="email" inputmode="email" maxlength="120" required>
+      <p class="hint" data-t="emailHint">WorkEasy will send your account invite to this email.</p>
+      <div class="err" id="e-email"></div>
+
+      <label for="prefLang" data-t="prefLang">Preferred language for messages</label>
+      <select id="prefLang" name="prefLang">
+        <option value="en" lang="en">English</option>
+        <option value="es" lang="es">Español</option>
+        <option value="hmn" lang="hmn">Hmoob</option>
+        <option value="so" lang="so">Soomaali</option>
+        <option value="ar" lang="ar">العربية</option>
+      </select>
+
+      <div class="hp" aria-hidden="true"><label>Company<input id="company" type="text" tabindex="-1" autocomplete="off"></label></div>
+
+      <div class="photo" id="photoBox">
+        <img id="preview" alt="">
+        <div class="example" aria-hidden="true">
+          <svg viewBox="0 0 120 150" role="img">
+            <rect class="ex-bg" x="4" y="4" width="112" height="142" rx="14"/>
+            <rect class="ex-frame" x="4" y="4" width="112" height="142" rx="14"/>
+            <circle class="ex-person" cx="60" cy="58" r="24"/>
+            <path class="ex-person" d="M14 146c2-30 20-50 46-50s44 20 46 50z"/>
+            <ellipse class="ex-guide" cx="60" cy="62" rx="36" ry="44"/>
+          </svg>
+          <span data-t="example">Example: head and shoulders</span>
+        </div>
+        <input id="photoInput" type="file" accept="image/*" capture="user" hidden>
+        <button type="button" class="btn btn-secondary" id="photoBtn" data-t="takePhoto">Take a selfie</button>
+        <p class="hint" data-t="photoHint">For your timeclock identification. Take it like the example: head and shoulders, facing the camera, good light, no hat or sunglasses.</p>
+        <div class="err" id="e-photo"></div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="submitBtn" data-t="submit">Submit</button>
+      <div class="status" id="status" role="status" aria-live="polite"></div>
+      <p class="privacy" data-t="privacy">Your information is used only for Bay Island identification.</p>
+    </form>
+  </section>
+
+  <section class="card done" id="doneCard" hidden>
+    <div class="check" aria-hidden="true">✓</div>
+    <h2 data-t="thanks">Thank you for your submission!</h2>
+    <p data-t="thanksBody">One of our staff will enter your information. You will then receive an email from WorkEasy to set up your account, so you can punch in and out and view your work hours. The whole process takes about 5 minutes.</p>
+  </section>
+</main>
+
+<script>
+// ---- SET THIS: paste the "HTTP URL" from the Power Automate trigger between the quotes ----
+const FLOW_URL = "PASTE_FLOW_URL_HERE";
+const FLOW_READY = /^https:\/\//.test(FLOW_URL); // false until the flow URL is pasted in
+
+const T = {
+  en: {
+    title:"Bay Island Timecard App Request",
+    intro:"Welcome to Bay Island! Please fill this out on your first day. It takes about 2 minutes.",
+    first:"First name", last:"Last name", agency:"Temp agency you work for",
+    phone:"Cell phone number", email:"Email address", optional:"(optional)",
+    takePhoto:"Take a selfie", retake:"Retake selfie",
+    photoHint:"For your timeclock identification. Take it like the example: head and shoulders, facing the camera, good light, no hat or sunglasses.",
+    submit:"Submit", sending:"Sending…",
+    privacy:"Your information is used only for Bay Island identification.",
+    thanks:"Thank you for your submission!", thanksBody:"One of our staff will enter your information. You will then receive an email from WorkEasy to set up your account, so you can punch in and out and view your work hours. The whole process takes about 5 minutes.",
+    req:"Required", badPhone:"Enter the number like 651-301-9687", badEmail:"Check the email address",
+    needPhoto:"Please take a selfie", badImage:"That photo didn't work. Please try again.",
+    failed:"Could not send. Check your signal and tap Submit again.",
+    example:"Example: head and shoulders",
+    emailHint:"WorkEasy will send your account invite to this email.",
+    fixBelow:"Some information needs fixing. Please correct the items marked in red and tap Submit again.",
+    fixBelowEmailed:"Some information needs fixing. Please correct the items marked in red and tap Submit again. We also emailed you this list."
+  },
+  es: {
+    title:"Solicitud para la App de Tarjeta de Tiempo – Bay Island",
+    intro:"¡Bienvenido a Bay Island! Llene esto en su primer día. Toma unos 2 minutos.",
+    first:"Nombre", last:"Apellido", agency:"Agencia de empleo temporal",
+    phone:"Número de celular", email:"Correo electrónico", optional:"(opcional)",
+    takePhoto:"Tomar una selfie", retake:"Tomar otra selfie",
+    photoHint:"Para su identificación en el reloj checador. Tómela como en el ejemplo: cabeza y hombros, mirando a la cámara, con buena luz, sin gorra ni lentes de sol.",
+    submit:"Enviar", sending:"Enviando…",
+    privacy:"Su información se usa solo para identificación en Bay Island.",
+    thanks:"¡Gracias por su registro!", thanksBody:"Un miembro de nuestro personal ingresará su información. Luego recibirá un correo de WorkEasy para crear su cuenta, marcar su entrada y salida y ver sus horas de trabajo. Todo el proceso toma unos 5 minutos.",
+    req:"Obligatorio", badPhone:"Escriba el número así: 651-301-9687", badEmail:"Revise el correo electrónico",
+    needPhoto:"Por favor tómese una selfie", badImage:"La foto no funcionó. Intente de nuevo.",
+    failed:"No se pudo enviar. Revise su señal y toque Enviar otra vez.",
+    prefLang:"Idioma preferido para mensajes",
+    example:"Ejemplo: cabeza y hombros",
+    emailHint:"WorkEasy enviará la invitación de su cuenta a este correo.",
+    fixBelow:"Hay información que corregir. Corrija lo marcado en rojo y toque Enviar otra vez.",
+    fixBelowEmailed:"Hay información que corregir. Corrija lo marcado en rojo y toque Enviar otra vez. También le enviamos esta lista por correo."
+  },
+  hmn: {
+    title:"Bay Island – Daim Ntawv Thov Siv App Sau Sijhawm Ua Haujlwm",
+    intro:"Zoo siab txais tos koj tuaj rau Bay Island! Thov sau daim ntawv no rau koj thawj hnub ua haujlwm. Siv sijhawm li 2 feeb.",
+    first:"Npe", last:"Xeem", agency:"Lub chaw ua haujlwm ib ntus (temp agency) uas koj ua haujlwm rau",
+    phone:"Tus xov tooj ntawm tes", email:"Email", optional:"(tsis yuav tsum sau)",
+    takePhoto:"Thaij ib daim duab selfie", retake:"Thaij duab dua",
+    photoHint:"Rau koj daim ID siv nrog lub moos sau sijhawm. Thaij zoo li daim qauv: taub hau thiab xub pwg, tig ntsej muag rau lub koob yees duab, kom pom kev zoo, tsis txhob hnav kaus mom los yog tsom iav tsaus.",
+    submit:"Xa", sending:"Tab tom xa…",
+    privacy:"Koj cov ntaub ntawv tsuas yog siv rau kev txheeb xyuas neeg ntawm Bay Island xwb.",
+    thanks:"Ua tsaug rau koj daim ntawv!", thanksBody:"Ib tug neeg ua haujlwm ntawm peb yuav sau koj cov ntaub ntawv. Tom qab ntawd koj yuav tau txais ib tsab email los ntawm WorkEasy kom koj tsim koj tus account, siv los nias thaum pib thiab tawm haujlwm thiab saib koj cov sijhawm ua haujlwm. Tag nrho siv sijhawm li 5 feeb.",
+    req:"Yuav tsum sau", badPhone:"Sau tus xov tooj li no: 651-301-9687", badEmail:"Kuaj xyuas tus email",
+    needPhoto:"Thov thaij ib daim duab selfie", badImage:"Daim duab ntawd siv tsis tau. Thov sim dua.",
+    failed:"Xa tsis tau. Kuaj xyuas koj lub xov tooj signal thiab nias Xa dua.",
+    prefLang:"Hom lus koj nyiam siv rau cov lus xa tuaj",
+    example:"Piv txwv: taub hau thiab xub pwg",
+    emailHint:"WorkEasy yuav xa daim ntawv caw tsim account mus rau tus email no.",
+    fixBelow:"Muaj ib co ntaub ntawv yuav tsum kho. Thov kho cov uas cim liab thiab nias Xa dua.",
+    fixBelowEmailed:"Muaj ib co ntaub ntawv yuav tsum kho. Thov kho cov uas cim liab thiab nias Xa dua. Peb kuj tau xa daim ntawv teev no mus rau koj email."
+  },
+  so: {
+    title:"Bay Island – Codsiga App-ka Kaarka Waqtiga",
+    intro:"Ku soo dhawow Bay Island! Fadlan buuxi foomkan maalintaada ugu horreysa. Waxay qaadanaysaa ilaa 2 daqiiqo.",
+    first:"Magaca koowaad", last:"Magaca dambe", agency:"Wakaaladda shaqada ku-meel-gaarka ah ee aad u shaqeyso",
+    phone:"Lambarka taleefanka gacanta", email:"Iimaylka", optional:"(ikhtiyaari)",
+    takePhoto:"Qaado sawir selfie ah", retake:"Mar kale qaado sawirka",
+    photoHint:"Aqoonsiga saacadda shaqada. U qaado sida tusaalaha: madaxa iyo garbaha, wajiga u jeedi kamarada, iftiin fiican, ha xiran koofiyad ama muraayad madow.",
+    submit:"Dir", sending:"Waa la dirayaa…",
+    privacy:"Macluumaadkaaga waxaa loo isticmaalaa oo kaliya aqoonsiga Bay Island.",
+    thanks:"Waad ku mahadsan tahay soo gudbintaada!", thanksBody:"Mid ka mid ah shaqaalahayaga ayaa geli doona macluumaadkaaga. Kadib waxaad heli doontaa iimayl ka yimid WorkEasy si aad u sameysato akoon, si aad u diiwaangeliso gelitaanka iyo bixitaanka oo aad u aragto saacadahaaga shaqada. Hawsha oo dhan waxay qaadanaysaa ilaa 5 daqiiqo.",
+    req:"Waa loo baahan yahay", badPhone:"Lambarka u qor sidan: 651-301-9687", badEmail:"Hubi cinwaanka iimaylka",
+    needPhoto:"Fadlan qaado sawir selfie ah", badImage:"Sawirkaas ma shaqeyn. Fadlan isku day mar kale.",
+    failed:"Lama diri karin. Hubi xiriirkaaga oo mar kale taabo Dir.",
+    prefLang:"Luqadda aad door bidayso ee fariimaha",
+    example:"Tusaale: madaxa iyo garbaha",
+    emailHint:"WorkEasy waxay iimaylkan u diri doontaa martiqaadka akoonkaaga.",
+    fixBelow:"Macluumaad qaar ayaa u baahan sixid. Fadlan sax waxyaabaha lagu calaamadeeyay casaanka oo mar kale taabo Dir.",
+    fixBelowEmailed:"Macluumaad qaar ayaa u baahan sixid. Fadlan sax waxyaabaha lagu calaamadeeyay casaanka oo mar kale taabo Dir. Liiskan waxaan sidoo kale kuugu soo dirnay iimayl."
+  },
+  ar: {
+    title:"طلب تطبيق بطاقة الوقت – Bay Island",
+    intro:"مرحبًا بك في Bay Island! يُرجى تعبئة هذا النموذج في يومك الأول. يستغرق حوالي دقيقتين.",
+    first:"الاسم الأول", last:"اسم العائلة", agency:"وكالة العمل المؤقت التي تعمل لديها",
+    phone:"رقم الهاتف المحمول", email:"البريد الإلكتروني", optional:"(اختياري)",
+    takePhoto:"التقط صورة سيلفي", retake:"أعد التقاط الصورة",
+    photoHint:"لتعريفك في ساعة الحضور. التقطها كما في المثال: الرأس والكتفان، انظر إلى الكاميرا، في إضاءة جيدة، بدون قبعة أو نظارات شمسية.",
+    submit:"إرسال", sending:"جارٍ الإرسال…",
+    privacy:"تُستخدم معلوماتك فقط لأغراض التعريف في Bay Island.",
+    thanks:"شكرًا لك على إرسال طلبك!", thanksBody:"سيقوم أحد موظفينا بإدخال معلوماتك. بعد ذلك ستصلك رسالة بريد إلكتروني من WorkEasy لإنشاء حسابك، حتى تتمكن من تسجيل الحضور والانصراف وعرض ساعات عملك. تستغرق العملية بأكملها حوالي 5 دقائق.",
+    req:"مطلوب", badPhone:"أدخل الرقم بهذا الشكل: 651-301-9687", badEmail:"تحقق من البريد الإلكتروني",
+    needPhoto:"يُرجى التقاط صورة سيلفي", badImage:"لم تنجح هذه الصورة. يُرجى المحاولة مرة أخرى.",
+    failed:"تعذّر الإرسال. تحقق من الإشارة ثم اضغط إرسال مرة أخرى.",
+    prefLang:"اللغة المفضلة للرسائل",
+    example:"مثال: الرأس والكتفان",
+    emailHint:"سيرسل WorkEasy دعوة الحساب إلى هذا البريد الإلكتروني.",
+    fixBelow:"بعض المعلومات تحتاج إلى تصحيح. يُرجى تصحيح العناصر المحددة باللون الأحمر ثم اضغط إرسال مرة أخرى.",
+    fixBelowEmailed:"بعض المعلومات تحتاج إلى تصحيح. يُرجى تصحيح العناصر المحددة باللون الأحمر ثم اضغط إرسال مرة أخرى. أرسلنا لك هذه القائمة أيضًا عبر البريد الإلكتروني."
+  }
+};
+T.en.prefLang = "Preferred language for messages";
+
+// Names stored in SharePoint (Preferred Language column) and the code for apps to use.
+const LANG_NAME = { en:"English", es:"Spanish", hmn:"Hmong", so:"Somali", ar:"Arabic" };
+
+function detectLang(){
+  const prefs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "en"]);
+  for (const p of prefs) { const c = p.toLowerCase().split("-")[0]; if (T[c]) return c; }
+  return "en";
+}
+let lang = detectLang();
+let prefTouched = false;
+let photoData = null; // base64 JPEG without prefix
+const $ = id => document.getElementById(id);
+
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  document.title = T[lang].title;
+  if (!prefTouched) $("prefLang").value = lang;
+  document.querySelectorAll("[data-t]").forEach(el => { el.textContent = T[lang][el.dataset.t]; });
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+  if (photoData) $("photoBtn").textContent = T[lang].retake;
+  document.querySelectorAll(".err, #status").forEach(e => { if (e.dataset.k) e.textContent = T[lang][e.dataset.k]; });
+}
+document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => { lang = b.dataset.lang; applyLang(); }));
+
+$("prefLang").addEventListener("change", () => { prefTouched = true; });
+
+// Format the phone as 651-301-9687 while typing.
+$("phone").addEventListener("input", e => {
+  let d = e.target.value.replace(/\D/g, "");
+  if (d.length === 11 && d[0] === "1") d = d.slice(1);
+  d = d.slice(0, 10);
+  e.target.value = d.length > 6 ? `${d.slice(0,3)}-${d.slice(3,6)}-${d.slice(6)}` : d.length > 3 ? `${d.slice(0,3)}-${d.slice(3)}` : d;
+});
+
+function setErr(id, key){ const e = $("e-" + id); e.dataset.k = key || ""; e.textContent = key ? T[lang][key] : ""; }
+
+$("photoBtn").addEventListener("click", () => $("photoInput").click());
+$("photoInput").addEventListener("change", async ev => {
+  const file = ev.target.files && ev.target.files[0];
+  if (!file) return;
+  try {
+    photoData = await shrink(file, 900, 0.82);
+    $("preview").src = "data:image/jpeg;base64," + photoData;
+    $("photoBox").classList.add("has");
+    $("photoBtn").textContent = T[lang].retake;
+    setErr("photo");
+  } catch (e) { photoData = null; setErr("photo", "badImage"); }
+  ev.target.value = "";
+});
+
+// Resize on the phone so uploads are small (about 100-250 KB).
+function shrink(file, maxSide, quality){
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const s = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      resolve(c.toDataURL("image/jpeg", quality).split(",")[1]);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("bad image")); };
+    img.src = url;
+  });
+}
+
+const clean = s => s.replace(/\s+/g, " ").trim();
+
+$("f").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  if ($("company").value) return; // bot trap
+  const v = {
+    firstName: clean($("firstName").value), lastName: clean($("lastName").value),
+    agency: clean($("agency").value), phone: $("phone").value.replace(/\D/g, ""),
+    email: clean($("email").value).toLowerCase()
+  };
+  let ok = true;
+  ["firstName","lastName","agency"].forEach(k => { if (!v[k]) { setErr(k, "req"); ok = false; } else setErr(k); });
+  if (v.phone.length === 11 && v.phone[0] === "1") v.phone = v.phone.slice(1);
+  if (v.phone.length !== 10) { setErr("phone", v.phone ? "badPhone" : "req"); ok = false; } else setErr("phone");
+  if (!v.email) { setErr("email", "req"); ok = false; } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.email)) { setErr("email", "badEmail"); ok = false; } else setErr("email");
+  if (!photoData) { setErr("photo", "needPhoto"); ok = false; }
+  if (!ok) { const first = document.querySelector(".err:not(:empty)"); first && first.scrollIntoView({behavior:"smooth", block:"center"}); return; }
+
+  v.phone = v.phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+  const pl = $("prefLang").value;
+  const payload = { ...v, language: LANG_NAME[pl], languageCode: pl, photo: photoData };
+
+  const btn = $("submitBtn"), st = $("status");
+  if (!FLOW_READY) { st.textContent = "Setup not finished: the flow URL has not been added to this page yet."; st.className = "status bad"; return; }
+  btn.disabled = true; btn.textContent = T[lang].sending; st.textContent = ""; st.className = "status";
+  try {
+    // text/plain avoids a CORS preflight; the flow parses the JSON.
+    const r = await fetch(FLOW_URL, { method: "POST", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(payload) });
+    if (r.status === 400) {
+      // The flow re-checked the form and lists what needs fixing, e.g. "phone,email,"
+      const codes = (await r.text()).replace(/"/g, "").split(",").map(c => c.trim()).filter(Boolean);
+      const map = { firstName:"req", lastName:"req", agency:"req", phone:"badPhone", email:"badEmail", photo:"needPhoto" };
+      codes.forEach(c => { if (map[c]) setErr(c, map[c]); });
+      if (codes.includes("photo")) { photoData = null; $("photoBox").classList.remove("has"); $("photoBtn").textContent = T[lang].takePhoto; }
+      st.dataset.k = codes.includes("email") ? "fixBelow" : "fixBelowEmailed";
+      st.textContent = T[lang][st.dataset.k]; st.className = "status bad";
+      btn.disabled = false; btn.textContent = T[lang].submit;
+      const first = document.querySelector(".err:not(:empty)"); first && first.scrollIntoView({behavior:"smooth", block:"center"});
+      return;
+    }
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    $("formCard").hidden = true; $("doneCard").hidden = false; window.scrollTo(0, 0);
+  } catch (e) {
+    st.dataset.k = "failed"; st.textContent = T[lang].failed; st.className = "status bad";
+    btn.disabled = false; btn.textContent = T[lang].submit;
+  }
+});
+
+applyLang();
+</script>
+</body>
+</html>
